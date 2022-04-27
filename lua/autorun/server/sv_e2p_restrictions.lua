@@ -51,7 +51,7 @@ function PLAYER:SetE2PLevel(level)
 end
 
 function PLAYER:HasE2PLevel(level)
-	return self:GetE2PLevel() >= level
+	return self:IsSuperAdmin() or self:GetE2PLevel() >= level
 end
 
 local error_message = "У вас не хватает прав на выполнение этой функции"
