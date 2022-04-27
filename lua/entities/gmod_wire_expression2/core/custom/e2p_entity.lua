@@ -21,7 +21,7 @@ local function entitySpawn(e2, class, pos, ang, freeze)
 	local ent = ents.Create(class)
 	if not IsValid(ent) then return e2:throw("Failed to create entity", nil) end
 
-	ent:SetPos(ent)
+	ent:SetPos(pos)
 	ent:SetAngles(ang)
 	ent:SetOwner(e2.player)
 	ent:Spawn()
