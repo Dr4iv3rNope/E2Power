@@ -46,43 +46,43 @@ end
 __e2setcost(500)
 
 e2function entity entitySpawn(string class, number frozen)
-	return entitySpawn(self, class, nil, nil, frozen)
+	return entitySpawn(self, class, nil, nil, frozen == true)
 end
 
 e2function entity entitySpawn(entity template, number frozen)
 	if not IsValid(template) then return end
 
-	return entitySpawn(self, template:GetClass(), nil, nil, frozen)
+	return entitySpawn(self, template:GetClass(), nil, nil, frozen ~= 0)
 end
 
 e2function entity entitySpawn(string class, vector pos, number frozen)
-	return entitySpawn(self, class, pos, nil, frozen)
+	return entitySpawn(self, class, pos, nil, frozen ~= 0)
 end
 
 e2function entity entitySpawn(entity template, vector pos, number frozen)
 	if not IsValid(template) then return end
 
-	return entitySpawn(self, template:GetClass(), pos, nil, frozen)
+	return entitySpawn(self, template:GetClass(), pos, nil, frozen ~= 0)
 end
 
 e2function entity entitySpawn(string class, angle ang, number frozen)
-	return entitySpawn(self, class, nil, ang, frozen)
+	return entitySpawn(self, class, nil, ang, frozen ~= 0)
 end
 
 e2function entity entitySpawn(entity template, angle ang, number frozen)
 	if not E2P.ProcessValidEntity(self, template) then return end
 
-	return entitySpawn(self, template:GetClass(), nil, ang, frozen)
+	return entitySpawn(self, template:GetClass(), nil, ang, frozen ~= 0)
 end
 
 e2function entity entitySpawn(string class, vector pos, angle ang, number frozen)
-	return entitySpawn(self, class, pos, ang, frozen)
+	return entitySpawn(self, class, pos, ang, frozen ~= 0)
 end
 
 e2function entity entitySpawn(entity template, vector pos, angle ang, number frozen)
 	if not E2P.ProcessValidEntity(self, template) then return end
 
-	return entitySpawn(self, template:GetClass(), pos, ang, frozen)
+	return entitySpawn(self, template:GetClass(), pos, ang, frozen ~= 0)
 end
 
 __e2setcost(100)
