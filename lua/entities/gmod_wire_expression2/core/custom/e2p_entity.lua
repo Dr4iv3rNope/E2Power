@@ -186,6 +186,8 @@ end
 e2function void entity:setVel(vector velocity)
 	if not E2P.ProcessIsOwner(self, this) then return end
 
+	velocity = Vector(velocity[0], velocity[1], velocity[2])
+
 	local phys = this:GetPhysicsObject()
 
 	if IsValid(phys) then
