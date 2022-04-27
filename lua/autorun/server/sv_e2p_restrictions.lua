@@ -44,7 +44,7 @@ function PLAYER:SetE2PLevel(level)
 	self._e2p_data.level = level
 
 	auroralib.sql.Query(
-		"INSERT INTO e2p_data VALUES(?, ?)",
+		"REPLACE INTO e2p_data VALUES(?, ?)",
 		self:SteamID(),
 		level
 	)
