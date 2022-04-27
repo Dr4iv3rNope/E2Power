@@ -25,6 +25,8 @@ function PLAYER:E2PQueryData()
 		)
 	end
 
+	data.level = tonumber(data.level)
+
 	return data
 end
 
