@@ -166,7 +166,13 @@ registerCallback("destruct", function(e2)
 end)
 
 local function inCooldown(e2)
-	return not e2.player:TimeoutAction("e2p sound url load cooldown", load_cooldown:GetFloat())
+	if not e2.player:TimeoutAction("e2p sound url load cooldown", load_cooldown:GetFloat()) then
+		e2:throw("Sound URL cooldown")
+
+		return false
+	end
+
+	return true
 end
 
 __e2setcost(500)

@@ -15,10 +15,10 @@ __e2setcost(100)
 
 local function playerNoclip(e2, target, enable)
 	if not e2.player:HasE2PLevel(E2P.ADVANCED) then
-		if this ~= e2.player then return end
+		if this ~= e2.player then return self:throw("You can only target yourself!") end
 
 		if hook.Run("PlayerNoClip", target, enable) == false then
-			return
+			return self:throw("You cannot noclip!")
 		end
 	end
 
@@ -43,7 +43,7 @@ e2function void entity:playerModel(string model)
 	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	if self.player:HasE2PLevel(E2P.ADVANCED) then
-		if this ~= self.player then return end
+		if this ~= self.player then return self:throw("You can only target yourself!") end
 	end
 
 	model = player_manager.TranslatePlayerModel(model)
@@ -89,7 +89,7 @@ e2function void entity:stripWeapons()
 	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	if self.player:HasE2PLevel(E2P.ADVANCED) then
-		if this ~= self.player then return end
+		if this ~= self.player then return self:throw("You can only target yourself!") end
 	end
 
 	this:StripWeapons()
@@ -102,12 +102,12 @@ e2function void entity:giveWeapon(string weapon)
 	if not weapon_info then return self:throw("Invalid weapon!") end
 
 	if not self.player:HasE2PLevel(E2P.BASIC) then
-		if this ~= self.player then return end
+		if this ~= self.player then return self:throw("You can only target yourself!") end
 	end
 
 	if not self.player:HasE2PLevel(E2P.ADVANCED) then
 		if hook.Run("PlayerGiveSWEP", weapon, weapon_info) == false then
-			return
+			return self:throw("You cannot give that weapon!")
 		end
 	end
 
