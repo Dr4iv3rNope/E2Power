@@ -72,6 +72,30 @@ function E2P.ProcessRestriction(e2, min_level)
 	return false
 end
 
+function E2P.ProcessValidEntity(e2, ent)
+	if not IsValid(ent) then e2:throw("Invalid entity!") return false end
+
+	return true
+end
+
+function E2P.ProcessValidPlayer(e2, ent)
+	if not E2P.ProcessValidEntity(ent) then return false end
+	if not ent:IsPlayer() then e2:throw("Entity must be a valid player!") return false end
+
+	return true
+end
+
+function E2P.ProcessIsOwner(e2, ent)
+	if not E2P.ProcessValidEntity(ent) then return false end
+
+	if e2.player:HasE2PLevel(E2P.ADVANCED) then return true end
+	if E2Lib.isOwner(e2, ent) then return true end
+
+	self:throw("You do not own this prop!")
+
+	return false
+end
+
 hook.Add("PlayerInitialSpawn", "e2p fetch from db", function(ply)
 	ply:E2PFetchFromDB(true)
 end)

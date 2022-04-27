@@ -70,7 +70,7 @@ e2function entity entitySpawn(string class, angle ang, number frozen)
 end
 
 e2function entity entitySpawn(entity template, angle ang, number frozen)
-	if not IsValid(template) then return end
+	if not E2P.ProcessValidEntity(self, template) then return end
 
 	return entitySpawn(self, template:GetClass(), nil, ang, frozen)
 end
@@ -80,7 +80,7 @@ e2function entity entitySpawn(string class, vector pos, angle ang, number frozen
 end
 
 e2function entity entitySpawn(entity template, vector pos, angle ang, number frozen)
-	if not IsValid(template) then return end
+	if not E2P.ProcessValidEntity(self, template) then return end
 
 	return entitySpawn(self, template:GetClass(), pos, ang, frozen)
 end
@@ -89,9 +89,7 @@ __e2setcost(100)
 
 e2function void entity:setModel(string model)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
-	if not E2Lib.isOwner(self, this) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	this:SetModel(model)
 	this:PhysicsInit(this:GetSolid())
@@ -99,8 +97,7 @@ end
 
 e2function void entity:setOwnerNoEntity()
 	if not E2P.ProcessRestriction(self, E2P.ADVANCED) then return end
-
-	if not IsValid(this) then return end
+	if not E2P.ProcessValidEntity(self, this) then return end
 
 	this:SetOwner(nil)
 end
@@ -109,8 +106,7 @@ __e2setcost(10)
 
 e2function void entity:setHealth(number health)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	if not self.player:HasE2PLevel(E2P.ADVANCED) then
 		health = math.Clamp(health, 0, this:GetMaxHealth())
@@ -121,8 +117,7 @@ end
 
 e2function void entity:heal(number amount)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	if not self.player:HasE2PLevel(E2P.ADVANCED) then
 		local amount_to_full_hp = math.max(0, this:GetMaxHealth() - amount)
@@ -135,38 +130,21 @@ end
 
 e2function void entity:setMaxHealth(number health)
 	if not E2P.ProcessRestriction(self, E2P.ADVANCED) then return end
-
-	if not IsValid(this) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	this:SetMaxHealth(math.Clamp(health, 0, E2P.INT_MAX))
 end
 
 e2function void entity:ignite(number duration)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
-
-	if
-		not self.player:HasE2PLevel(E2P.ADVANCED) and
-		not this:CPPICanProperty(self.player, "ignite")
-	then
-		return
-	end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	this:Ignite(duration, 0)
 end
 
 e2function void entity:extinguish()
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
-
-	if
-		not self.player:HasE2PLevel(E2P.ADVANCED) and
-		not this:CPPICanProperty(self.player, "extinguish")
-	then
-		return
-	end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	this:Extinguish()
 end
@@ -175,30 +153,26 @@ __e2setcost(50)
 
 e2function void entity:setFire(string input, string param, number delay)
 	if not E2P.ProcessRestriction(self, E2P.FULL) then return end
-
-	if not IsValid(this) then return end
+	if not E2P.ProcessValidEntity(self, this) then return end
 
 	this:Fire(input, param, delay)
 end
 
 e2function void entity:setKeyValue(string name, value)
 	if not E2P.ProcessRestriction(self, E2P.FULL) then return end
-
-	if not IsValid(this) then return end
+	if not E2P.ProcessValidEntity(self, this) then return end
 
 	this:SetKeyValue(name, value)
 end
 
 e2function void entity:remove()
-	if not IsValid(this) then return end
-	if not E2Lib.isOwner(self, this) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	SafeRemoveEntity(this)
 end
 
 e2function void entity:remove(number second)
-	if not IsValid(this) then return end
-	if not E2Lib.isOwner(self, this) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	SafeRemoveEntityDelayed(this, second)
 end

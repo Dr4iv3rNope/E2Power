@@ -181,6 +181,7 @@ e2function void soundURLload(string id, string url, number volume, number noplay
 end
 
 e2function void soundURLload(string id, string url, number volume, number noplay, entity parent)
+	if not E2P.ProcessValidEntity(self, parent) then return end
 	if inCooldown(self) then return end
 
 	play(self, id, url, false)
@@ -190,7 +191,7 @@ e2function void soundURLload(string id, string url, number volume, number noplay
 end
 
 e2function void entity:soundURLload(string id, string url, number volume, number noplay)
-	if not IsValid(this) then return end
+	if not E2P.ProcessValidEntity(self, this) then return end
 	if inCooldown(self) then return end
 
 	play(self, id, url, false)
@@ -216,6 +217,8 @@ e2function void soundURLpos(string id, vector pos)
 end
 
 e2function void soundURLparent(string id, entity parent)
+	if not E2P.ProcessValidEntity(self, parent) then return end
+
 	setParent(self, id, parent)
 end
 
@@ -237,7 +240,7 @@ e2function void soundURLPurge()
 end
 
 e2function array entity:soundFFT(string id)
-	if not IsValid(this) then return end
+	if not E2P.ProcessValidEntity(self, this) then return end
 
 	return requestFFT(this.context, id)
 end

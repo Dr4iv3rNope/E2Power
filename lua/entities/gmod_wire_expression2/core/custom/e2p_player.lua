@@ -2,9 +2,7 @@ __e2setcost(10)
 
 e2function void entity:setArmor(number armor)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	if not self.player:HasE2PLevel(E2P.ADVANCED) then
 		armor = math.Clamp(armor, 0, this:GetMaxArmor())
@@ -16,9 +14,6 @@ end
 __e2setcost(100)
 
 local function playerNoclip(e2, target, enable)
-	if not IsValid(target) then return end
-	if not target:IsPlayer() then return end
-
 	if not e2.player:HasE2PLevel(E2P.ADVANCED) then
 		if this ~= e2.player then return end
 
@@ -31,15 +26,13 @@ local function playerNoclip(e2, target, enable)
 end
 
 e2function void entity:playerNoclip(number enable)
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	playerNoclip(self, this, enable ~= 0)
 end
 
 e2function void entity:playerNoclipToggle()
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	local enable = this:GetMoveType() ~= MOVETYPE_NOCLIP
 
@@ -47,8 +40,7 @@ e2function void entity:playerNoclipToggle()
 end
 
 e2function void entity:playerModel(string model)
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	if self.player:HasE2PLevel(E2P.ADVANCED) then
 		if this ~= self.player then return end
@@ -62,37 +54,29 @@ end
 __e2setcost(50)
 
 e2function void entity:playerLock()
-	if not E2P.ProcessRestriction(self, E2P.FULL) then return end
-
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessRestriction(self, E2P.ADVANCED) then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	this:Lock()
 end
 
 e2function void entity:playerUnlock()
-	if not E2P.ProcessRestriction(self, E2P.FULL) then return end
-
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessRestriction(self, E2P.ADVANCED) then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	this:UnLock()
 end
 
 e2function void entity:playerFreeze()
-	if not E2P.ProcessRestriction(self, E2P.FULL) then return end
-
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessRestriction(self, E2P.ADVANCED) then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	this:Freeze(true)
 end
 
 e2function void entity:playerUnFreeze()
-	if not E2P.ProcessRestriction(self, E2P.FULL) then return end
-
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessRestriction(self, E2P.ADVANCED) then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	this:Freeze(false)
 end
@@ -102,8 +86,7 @@ e2function void stripWeapons()
 end
 
 e2function void entity:stripWeapons()
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	if self.player:HasE2PLevel(E2P.ADVANCED) then
 		if this ~= self.player then return end
@@ -113,11 +96,10 @@ e2function void entity:stripWeapons()
 end
 
 e2function void entity:giveWeapon(string weapon)
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	local weapon_info = weapons.GetStored(weapon)
-	if not weapon_info then return end
+	if not weapon_info then return self:throw("Invalid weapon!") end
 
 	if not self.player:HasE2PLevel(E2P.BASIC) then
 		if this ~= self.player then return end
@@ -133,22 +115,19 @@ e2function void entity:giveWeapon(string weapon)
 end
 
 e2function array entity:weapons()
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	return this:GetWeapons()
 end
 
 e2function string entity:getUserGroup()
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	return this:GetUserGroup()
 end
 
 e2function number entity:isUserGroup(string group)
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	return this:IsUserGroup(group) and 1 or 0
 end
@@ -161,64 +140,52 @@ end
 
 e2function void entity:plyJumpPower(number power)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	this:SetJumpPower(power)
 end
 
 e2function void entity:plyRunSpeed(number speed)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	this:SetRunSpeed(speed)
 end
 
 e2function void entity:plyWalkSpeed(number speed)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	this:SetWalkSpeed(speed)
 end
 
 e2function void entity:plyCrouchWalkSpeed(number speed)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
 
 	this:SetCrouchedWalkSpeed(speed)
 end
 
 e2function number entity:plyGetRunSpeed()
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return -1 end
 
 	return this:GetRunSpeed()
 end
 
 e2function number entity:plyGetWalkSpeed()
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return -1 end
 
 	return this:GetWalkSpeed()
 end
 
 e2function number entity:plyGetMaxSpeed()
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return -1 end
 
 	return this:GetMaxSpeed()
 end
 
 e2function number entity:plyGetJumpPower()
-	if not IsValid(this) then return end
-	if not this:IsPlayer() then return end
+	if not E2P.ProcessValidPlayer(self, this) then return -1 end
 
 	return this:GetJumpPower()
 end

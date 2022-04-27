@@ -68,11 +68,9 @@ __e2setcost(100)
 
 e2function void entity:shootTo(vector start, vector dir, number spread, number force, number damage, string effect)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	effect = effect:lower()
-
-	if not IsValid(this) then return end
-	if not E2Lib.isOwner(self, this) then return end
 
 	if blacklist_effects[effect] then
 		error(string.format("Эффект %s запрещен!", effect))
@@ -118,9 +116,7 @@ end
 
 e2function void entity:explosion(number damage, number radius)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
-	if not E2Lib.isOwner(self, this) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	if not self.player:HasE2PLevel(E2P.ADVANCED) then
 		damage = math.Clamp(damage, 1, 100)
@@ -137,8 +133,8 @@ e2function void entity:explosion(number damage, number radius)
 end
 
 e2function void entity:explosion()
-	if not IsValid(this) then return end
-	if not E2Lib.isOwner(self, this) then return end
+	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	local radius = this:OBBMaxs() - this:OBBMins()
 	radius = (radius.x^2 + radius.y^2 + radius.z^2) ^ 0.5
@@ -173,51 +169,41 @@ end
 
 e2function void entity:takeDamage(number damage, string type)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
-	if not E2Lib.isOwner(self, this) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	takeDamage(this, self.player, damage, type)
 end
 
 e2function void entity:takeDamage(number damage, string type, vector force)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
-	if not E2Lib.isOwner(self, this) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	takeDamage(this, self.player, damage, type, force)
 end
 
 e2function void entity:takeDamage(number damage, string type, vector force, entity attacker, entity inflictor)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
-	if not E2Lib.isOwner(self, this) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	takeDamage(this, self.player, damage, type, force, attacker, inflictor)
 end
 
 e2function void entity:takeDamage(number damage, entity attacker, entity inflictor)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
-	if not E2Lib.isOwner(self, this) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	takeDamage(this, self.player, damage, "GENERIC", 0, attacker, inflictor)
 end
 
 e2function void entity:takeDamage(number damage)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
-
-	if not IsValid(this) then return end
-	if not E2Lib.isOwner(self, this) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
 
 	takeDamage(this, self.player, damage, "GENERIC", 0, self.player, self.entity)
 end
 
 e2function void noDuplications()
-	if not self.player:HasE2PLevel(E2P.ADVANCED) then return end
+	if not E2P.ProcessRestriction(self, E2P.FULL) then return end
 
 	self.entity.original	= "selfDestruct()"
 	self.entity.buffer		= "selfDestruct()"
