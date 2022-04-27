@@ -101,6 +101,10 @@ e2function void entity:giveWeapon(string weapon)
 	local weapon_info = weapons.GetStored(weapon)
 	if not weapon_info then return self:throw("Invalid weapon!") end
 
+	if not weapon_info.Spawnable then
+		return self:throw("Weapon is not spawnable!")
+	end
+
 	if not self.player:HasE2PLevel(E2P.BASIC) then
 		if this ~= self.player then return self:throw("You can only target yourself!") end
 	end
