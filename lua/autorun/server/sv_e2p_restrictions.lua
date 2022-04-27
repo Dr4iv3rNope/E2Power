@@ -79,14 +79,14 @@ function E2P.ProcessValidEntity(e2, ent)
 end
 
 function E2P.ProcessValidPlayer(e2, ent)
-	if not E2P.ProcessValidEntity(ent) then return false end
+	if not E2P.ProcessValidEntity(e2, ent) then return false end
 	if not ent:IsPlayer() then e2:throw("Entity must be a valid player!") return false end
 
 	return true
 end
 
 function E2P.ProcessIsOwner(e2, ent)
-	if not E2P.ProcessValidEntity(ent) then return false end
+	if not E2P.ProcessValidEntity(e2, ent) then return false end
 
 	if e2.player:HasE2PLevel(E2P.ADVANCED) then return true end
 	if E2Lib.isOwner(e2, ent) then return true end
