@@ -182,3 +182,15 @@ e2function void entity:noCollideAll(number state)
 
 	this:SetCollisionGroup(state ~= 0 and COLLISION_GROUP_WORLD or COLLISION_GROUP_NONE)
 end
+
+e2function void entity:setVel(vector velocity)
+	if not E2P.ProcessIsOwner(self, this) then return end
+
+	local phys = this:GetPhysicsObject()
+
+	if IsValid(phys) then
+		phys:SetVelocity(velocity)
+	else
+		this:SetVecloity(velocity)
+	end
+end
