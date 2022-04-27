@@ -176,3 +176,9 @@ e2function void entity:remove(number second)
 
 	SafeRemoveEntityDelayed(this, second)
 end
+
+e2function void entity:noCollideAll(number state)
+	if not E2P.ProcessIsOwner(self, this) then return end
+
+	this:SetCollisionGroup(state ~= 0 and COLLISION_GROUP_WORLD or COLLISION_GROUP_NONE)
+end
