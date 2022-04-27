@@ -110,8 +110,8 @@ e2function void entity:giveWeapon(string weapon)
 	end
 
 	if not self.player:HasE2PLevel(E2P.ADVANCED) then
-		if hook.Run("PlayerGiveSWEP", weapon, weapon_info) == false then
-			return self:throw("You cannot give that weapon!")
+		if not self.player:IsAdmin() and weapon_info.AdminOnly then
+			return self:throw("Weapon is admin only!")
 		end
 	end
 
