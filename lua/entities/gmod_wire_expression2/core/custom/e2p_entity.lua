@@ -1,6 +1,9 @@
 local whitelist = {
 	["rpg_missile"] = true,
 	["crossbow_bolt"] = true,
+	["item_healthvial"] = true,
+	["item_healthkit"] = true,
+	["item_battery"] = true
 }
 
 local function canSpawnEntity(class)
