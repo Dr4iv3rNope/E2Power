@@ -1,5 +1,4 @@
 local whitelist = {
-	["prop_physics"] = true,
 	["rpg_missile"] = true,
 	["crossbow_bolt"] = true,
 }
