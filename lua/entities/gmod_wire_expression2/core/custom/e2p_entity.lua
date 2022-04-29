@@ -23,7 +23,7 @@ local function entitySpawn(e2, class, pos, ang, freeze)
 	ang = ang or e2.entity:GetAngles()
 
 	if not canSpawnEntity(class) then
-		return e2:throw("Этот тип энтити нельзя спавнить!")
+		return e2:throw("Entity class is not whitelisted!")
 	end
 
 	local ent = ents.Create(class)
