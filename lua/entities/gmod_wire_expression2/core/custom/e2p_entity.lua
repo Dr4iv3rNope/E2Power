@@ -1,3 +1,5 @@
+local entity_spawn_cooldown = CreateConVar("wire_expression2_e2p_entity_spawn_cooldown", "1", FCVAR_ARCHIVE)
+
 local whitelist = {
 	["rpg_missile"] = true,
 	["crossbow_bolt"] = true,
@@ -12,6 +14,10 @@ end
 
 local function entitySpawn(e2, class, pos, ang, freeze)
 	if not E2P.ProcessRestriction(e2, E2P.BASIC) then return end
+
+	if not e2.player:TimeoutAction("e2p entitySpawn cooldown", entity_spawn_cooldown:GetFloat()) then
+		return e2:throw("Entity spawn cooldown!")
+	end
 
 	pos = pos or (e2.entity:GetPos() + (e2.entity:GetUp() * 25))
 	ang = ang or e2.entity:GetAngles()
