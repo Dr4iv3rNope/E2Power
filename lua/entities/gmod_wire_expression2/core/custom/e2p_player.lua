@@ -115,7 +115,7 @@ e2function void entity:giveWeapon(string weapon)
 		end
 	end
 
-	if hook.Run("PlayerGiveSWEP", weapon, weapon_info) == false then
+	if hook.Run("PlayerGiveSWEP", self.player, weapon, weapon_info) == false then
 		return self:throw("You cannot give that weapon!")
 	end
 
