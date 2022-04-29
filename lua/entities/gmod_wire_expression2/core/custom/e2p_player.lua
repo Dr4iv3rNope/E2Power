@@ -81,6 +81,8 @@ e2function void entity:playerUnFreeze()
 	this:Freeze(false)
 end
 
+__e2setcost(500)
+
 e2function void stripWeapons()
 	self.player:StripWeapons()
 end
@@ -121,6 +123,8 @@ e2function void entity:giveWeapon(string weapon)
 
 	this:Give(weapon)
 end
+
+__e2setcost(10)
 
 e2function array entity:weapons()
 	if not E2P.ProcessValidPlayer(self, this) then return end
