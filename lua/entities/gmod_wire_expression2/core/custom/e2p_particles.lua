@@ -242,7 +242,7 @@ e2function void particle(
 	})
 end
 
-__e2setcost(50)
+__e2setcost(10)
 
 e2function void particleGravity(vector gravity)
 	gravity = Vector(gravity[1], gravity[2], gravity[3])
