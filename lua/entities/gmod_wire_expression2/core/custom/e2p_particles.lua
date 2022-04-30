@@ -112,7 +112,11 @@ local whitelist_materials = {
 local function particle(e2, data)
 	if not E2P.ProcessRestriction(e2, E2P.BASIC) then return end
 
-	if e2.player:TimeoutAction("e2p particle cooldown", particle_cooldown:GetFloat()) then
+	if not whitelist_materials[data.material] then
+		return e2:throw("Particle material is not whitelisted!")
+	end
+
+	if not e2.player:TimeoutAction("e2p particle cooldown", particle_cooldown:GetFloat()) then
 		return e2:throw("Particle spawn cooldown!")
 	end
 
