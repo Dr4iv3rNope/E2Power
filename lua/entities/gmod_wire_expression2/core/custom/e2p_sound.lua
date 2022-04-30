@@ -35,7 +35,7 @@ local function restrictLoopingSound(e2, path)
 	return true
 end
 
-e2function void soundPlayAll(string path, numer volume, number pitch)
+e2function void soundPlayAll(string path, number volume, number pitch)
 	if E2P.ProcessRestriction(self, E2P.BASIC) then return end
 	if not cooldownPlaySound(self) then return end
 
