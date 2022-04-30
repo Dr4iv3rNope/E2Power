@@ -138,6 +138,7 @@ local function particle(e2, data)
 	net.WriteVector(e2.data.e2p_particle_data.gravity)
 	net.WriteBool(e2.data.e2p_particle_data.collide)
 	net.WriteFloat(e2.data.e2p_particle_data.bounce)
+	net.Broadcast()
 end
 
 registerCallback("construct", function(e2)
