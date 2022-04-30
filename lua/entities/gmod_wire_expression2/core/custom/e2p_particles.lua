@@ -113,7 +113,7 @@ local function particle(e2, data)
 	if not E2P.ProcessRestriction(e2, E2P.BASIC) then return end
 
 	if e2.player:TimeoutAction("e2p particle cooldown", particle_cooldown:GetFloat()) then
-		return self:throw("Particle spawn cooldown!")
+		return e2:throw("Particle spawn cooldown!")
 	end
 
 	net.Start("e2p_particles_create")
