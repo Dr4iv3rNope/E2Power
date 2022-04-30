@@ -40,3 +40,25 @@ function auroralib.sql.First(query, ...)
 
 	return output and output[1] or nil
 end
+
+local ENTITY = FindMetaTable("Entity")
+
+function ENTITY:TimeoutAction(id, timeout)
+	local timeout_table = self._aurora_timeout_table
+	local t = CurTime()
+
+	if not timeout_table then
+		timeout_table = {}
+
+		self._aurora_timeout_table = timeout_table
+	end
+
+	local next_action = timeout_table[id] or 0
+
+	if next_action > t then
+		return false
+	end
+
+	timeout_table[id] = t + timeout
+	return true
+end
