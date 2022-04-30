@@ -210,11 +210,21 @@ e2function void entity:setVel(vector velocity)
 
 	velocity = Vector(velocity[1], velocity[2], velocity[3])
 
-	local phys = this:GetPhysicsObject()
+	if not this:IsPlayer() then
+		local phys_count = this:GetPhysicsObjectCount() - 1
 
-	if IsValid(phys) then
-		phys:SetVelocity(velocity)
-	else
-		this:SetVecloity(velocity)
+		if phys_count >= 0 then
+			for i = 0, phys_count do
+				local phys = this:GetPhysicsObjectNum(i)
+
+				if IsValid(phys) then
+					phys:SetVelocity(velocity)
+				end
+			end
+
+			return
+		end
 	end
+
+	this:SetVelocity(velocity)
 end
