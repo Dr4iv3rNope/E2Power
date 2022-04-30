@@ -143,7 +143,7 @@ end
 
 registerCallback("construct", function(e2)
 	e2.data.e2p_particle_data = {
-		gravity= Vector(0, 0, -9.8),
+		gravity = Vector(0, 0, -9.8),
 		collide = true,
 		bounce = 0.3,
 	}
