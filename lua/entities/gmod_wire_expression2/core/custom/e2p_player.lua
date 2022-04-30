@@ -374,8 +374,8 @@ e2function entity entity:playerRagdoll()
 			pos.z = pos.z + 10
 
 			this:Spawn()
+
 			this:SetPos(pos)
-			this:SetVelocity(ragdoll:GetVelocity())
 			this:SetAngles(Angle(0, yaw, 0))
 
 			self.data.e2p_player_ragdolls[this] = nil
