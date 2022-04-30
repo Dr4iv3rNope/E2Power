@@ -1,4 +1,5 @@
-local particle_cooldown = CreateConVar("wire_expression2_e2p_particle_cooldown", "1", FCVAR_ARCHIVE)
+local particle_limit = CreateConVar("wire_expression2_e2p_particle_limit", "10", FCVAR_ARCHIVE)
+local particle_cooldown = CreateConVar("wire_expression2_e2p_particle_cooldown", "0.1", FCVAR_ARCHIVE)
 
 util.AddNetworkString("e2p_particles_create")
 
@@ -53,6 +54,27 @@ local whitelist_materials = {
 	["sprites/sent_ball"] = true,
 }
 
+local function processParticleLimit(e2, data)
+	local ply = e2.player
+	local count = ply._e2p_particle_limit or 0
+
+	if count > particle_limit:GetInt() then
+		e2:throw("Particle limit!")
+
+		return false
+	end
+
+	timer.Create("e2p reset particle limit " .. ply:UserID(), data.die_time, 1, function()
+		if not IsValid(ply) then return end
+
+		ply._e2p_particle_limit = nil
+	end)
+
+	ply._e2p_particle_limit = count + 1
+
+	return true
+end
+
 local function particle(e2, data)
 	if not E2P.ProcessRestriction(e2, E2P.BASIC) then return end
 
@@ -69,6 +91,8 @@ local function particle(e2, data)
 	data.die_time = math.Clamp(data.die_time, 0.1, 10)
 	data.start_size = math.Clamp(data.start_size, 0, 5)
 	data.end_size = math.Clamp(data.end_size, 0, 5)
+
+	if not processParticleLimit(e2, data) then return end
 
 	net.Start("e2p_particles_create")
 	net.WriteEntity(e2.entity)
