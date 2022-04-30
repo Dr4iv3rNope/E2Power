@@ -247,15 +247,15 @@ __e2setcost(10)
 e2function void particleGravity(vector gravity)
 	gravity = Vector(gravity[1], gravity[2], gravity[3])
 
-	self.e2.data.e2p_particle_data.gravity = gravity
+	self.data.e2p_particle_data.gravity = gravity
 end
 
 e2function void particleCollision(number enable)
-	self.e2.data.e2p_particle_data.collide = collide ~= 0
+	self.data.e2p_particle_data.collide = collide ~= 0
 end
 
 e2function void particleBounce(number bounce)
-	self.e2.data.e2p_particle_data.bounce = bounce
+	self.data.e2p_particle_data.bounce = bounce
 end
 
 e2function number particleLimit()
