@@ -298,3 +298,81 @@ e2function void entity:playerSetBoneAng(string boneName, angle ang)
 
 	this:ManipulateBoneAngles(this:LookupBone(boneName), ang)
 end
+
+__e2setcost(10)
+
+e2function number entity:playerIsRagdoll()
+	if not E2P.ProcessValidPlayer(self, this) then return 0 end
+
+	return IsValid(this._e2p_ragdoll) and 1 or 0
+end
+
+__e2setcost(15000)
+
+e2function entity entity:playerRagdoll()
+	if not E2P.ProcessRestriction(self, E2P.ADVANCED) then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
+
+	if not this:Alive() then
+		return self:throw("Player must be alive!")
+	end
+
+	if this:InVehicle() then
+		this:ExitVehicle()
+	end
+
+	if not IsValid(this._e2p_ragdoll) then
+		local ragdoll = ents.Create("prop_ragdoll")
+
+		if not IsValid(ragdoll) then
+			return self:throw("Cannot create ragdoll!")
+		end
+
+		this._e2p_ragdoll = ragdoll
+
+		ragdoll:SetPos(this:GetPos())
+		ragdoll:SetAngles(this:GetAngles())
+		ragdoll:SetAngles(this:GetAngles())
+		ragdoll:SetModel(this:GetModel())
+		ragdoll:Spawn()
+		ragdoll:Activate()
+
+		local velocity = this:GetVelocity()
+
+		for i = 0, ragdoll:GetPhysicsObjectCount() do
+			local phys = ragdoll:GetPhysicsObjectNum(i)
+
+			if IsValid(phys) then
+				phys:SetVelocity(velocity)
+			end
+		end
+
+		ragdoll:CallOnRemove("restore player", function()
+			if not IsValid(this) then return end
+
+			this:SetParent(nil)
+			this:UnSpectate()
+
+			local ragdoll = this._e2p_ragdoll
+			this._e2p_ragdoll = nil
+
+			local yaw = ragdoll:GetAngles().yaw
+			local pos = ragdoll:GetPos()
+			pos.z = pos.z + 10
+
+			this:Spawn()
+			this:SetPos(pos)
+			this:SetVelocity(ragdoll:GetVelocity())
+			this:SetAngles(Angle(0, yaw, 0))
+		end)
+
+		this:SetParent(ragdoll)
+		this:Spectate(OBS_MODE_CHASE)
+		this:SpectateEntity(ragdoll)
+		this:StripWeapons()
+	else
+		this._e2p_ragdoll:Remove()
+
+		return nil
+	end
+end
