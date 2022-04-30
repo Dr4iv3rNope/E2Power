@@ -62,3 +62,14 @@ function ENTITY:TimeoutAction(id, timeout)
 	timeout_table[id] = t + timeout
 	return true
 end
+
+function ENTITY:TimeoutGetUntil(id)
+	local timeout_table = self._aurora_timeout_table
+	if not timeout_table then return 0 end
+
+	return timeout_table[id] or 0
+end
+
+function ENTITY:TimeoutIsExpired(id)
+	return CurTime() > self:TimeoutGetUntil(id)
+end
