@@ -128,7 +128,7 @@ local function particle(e2, data)
 	net.WriteFloat(e2.data.e2p_particle_data.bounce)
 end
 
-registerCallback("destruct", function(e2)
+registerCallback("construct", function(e2)
 	e2.data.e2p_particle_data = {
 		gravity= Vector(0, 0, -9.8),
 		collide = true,
