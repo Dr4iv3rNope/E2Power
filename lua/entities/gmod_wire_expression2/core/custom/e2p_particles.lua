@@ -257,3 +257,24 @@ end
 e2function void particleBounce(number bounce)
 	self.e2.data.e2p_particle_data.bounce = bounce
 end
+
+e2function number particleLimit()
+	return particle_limit:GetInt()
+end
+
+e2function number hasParticleLimit()
+	local count = ply._e2p_particle_limit or 0
+	local hasLimit = count > particle_limit:GetInt()
+
+	return hasLimit and 1 or 0
+end
+
+e2function number particleCooldown()
+	return particle_cooldown:GetFloat()
+end
+
+e2function number hasParticleCooldown()
+	local hasCooldown = not self.player:TimeoutIsExpired()
+
+	return hasCooldown and 1 or 0
+end
