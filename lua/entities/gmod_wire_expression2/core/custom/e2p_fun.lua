@@ -79,7 +79,7 @@ e2function void entity:shootTo(vector start, vector dir, number spread, number f
 	local bullet = {
 		Num = 1,
 		Src = start,
-		Dir = Vector(dir[0], dir[1], dir[2]),
+		Dir = Vector(dir[1], dir[2], dir[3]),
 		Spread = Vector(spread, spread, 0),
 		Tracer = 1,
 		TracerName = effect,
@@ -94,7 +94,7 @@ end
 e2function void shake(vector pos, number amplitude, number frequency, number duration, number radius)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
 
-	pos = Vector(pos[0], pos[1], pos[2])
+	pos = Vector(pos[1], pos[2], pos[3])
 
 	util.ScreenShake(pos, amplitude, frequency, duration, radius)
 end
@@ -102,7 +102,7 @@ end
 e2function void explosion(number damage, number radius, vector pos)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
 
-	pos = Vector(pos[0], pos[1], pos[2])
+	pos = Vector(pos[1], pos[2], pos[3])
 
 	if not self.player:HasE2PLevel(E2P.ADVANCED) then
 		damage = math.Clamp(damage, 1, 100)
@@ -155,7 +155,7 @@ end
 e2function void explosion(number damage, number radius, vector pos, entity attacker, entity inflictor)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
 
-	pos = Vector(pos[0], pos[1], pos[2])
+	pos = Vector(pos[1], pos[2], pos[3])
 
 	if not self.player:HasE2PLevel(E2P.ADVANCED) then
 		damage = math.Clamp(damage, 1, 100)
@@ -170,7 +170,7 @@ end
 e2function void explosion(vector pos)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
 
-	pos = Vector(pos[0], pos[1], pos[2])
+	pos = Vector(pos[1], pos[2], pos[3])
 
 	createExplosion(self.entity, self.player, pos, 100, 100)
 end
@@ -186,7 +186,7 @@ e2function void entity:takeDamage(number damage, string type, vector force)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
 	if not E2P.ProcessIsOwner(self, this) then return end
 
-	force = Vector(force[0], force[1], force[2])
+	force = Vector(force[1], force[2], force[3])
 
 	takeDamage(this, self.player, damage, type, force)
 end
@@ -195,7 +195,7 @@ e2function void entity:takeDamage(number damage, string type, vector force, enti
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
 	if not E2P.ProcessIsOwner(self, this) then return end
 
-	force = Vector(force[0], force[1], force[2])
+	force = Vector(force[1], force[2], force[3])
 
 	takeDamage(this, self.player, damage, type, force, attacker, inflictor)
 end

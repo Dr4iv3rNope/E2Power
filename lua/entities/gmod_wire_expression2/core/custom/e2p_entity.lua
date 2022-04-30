@@ -64,7 +64,7 @@ e2function entity entitySpawn(entity template, number frozen)
 end
 
 e2function entity entitySpawn(string class, vector pos, number frozen)
-	pos = Vector(pos[0], pos[1], pos[2])
+	pos = Vector(pos[1], pos[2], pos[3])
 
 	return entitySpawn(self, class, pos, nil, frozen ~= 0)
 end
@@ -72,13 +72,13 @@ end
 e2function entity entitySpawn(entity template, vector pos, number frozen)
 	if not IsValid(template) then return end
 
-	pos = Vector(pos[0], pos[1], pos[2])
+	pos = Vector(pos[1], pos[2], pos[3])
 
 	return entitySpawn(self, template:GetClass(), pos, nil, frozen ~= 0)
 end
 
 e2function entity entitySpawn(string class, angle ang, number frozen)
-	ang = Angle(ang[0], ang[1], ang[2])
+	ang = Angle(ang[1], ang[2], ang[3])
 
 	return entitySpawn(self, class, nil, ang, frozen ~= 0)
 end
@@ -86,21 +86,21 @@ end
 e2function entity entitySpawn(entity template, angle ang, number frozen)
 	if not E2P.ProcessValidEntity(self, template) then return end
 
-	ang = Angle(ang[0], ang[1], ang[2])
+	ang = Angle(ang[1], ang[2], ang[3])
 
 	return entitySpawn(self, template:GetClass(), nil, ang, frozen ~= 0)
 end
 
 e2function entity entitySpawn(string class, vector pos, angle ang, number frozen)
-	pos = Vector(pos[0], pos[1], pos[2])
-	ang = Angle(ang[0], ang[1], ang[2])
+	pos = Vector(pos[1], pos[2], pos[3])
+	ang = Angle(ang[1], ang[2], ang[3])
 
 	return entitySpawn(self, class, pos, ang, frozen ~= 0)
 end
 
 e2function entity entitySpawn(entity template, vector pos, angle ang, number frozen)
-	pos = Vector(pos[0], pos[1], pos[2])
-	ang = Angle(ang[0], ang[1], ang[2])
+	pos = Vector(pos[1], pos[2], pos[3])
+	ang = Angle(ang[1], ang[2], ang[3])
 
 	if not E2P.ProcessValidEntity(self, template) then return end
 
@@ -208,7 +208,7 @@ end
 e2function void entity:setVel(vector velocity)
 	if not E2P.ProcessIsOwner(self, this) then return end
 
-	velocity = Vector(velocity[0], velocity[1], velocity[2])
+	velocity = Vector(velocity[1], velocity[2], velocity[3])
 
 	local phys = this:GetPhysicsObject()
 

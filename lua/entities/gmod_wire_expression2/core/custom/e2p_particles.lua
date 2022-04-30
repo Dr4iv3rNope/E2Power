@@ -250,7 +250,7 @@ end
 __e2setcost(50)
 
 e2function void particleGravity(vector gravity)
-	gravity = Vector(gravity[0], gravity[1], gravity[2])
+	gravity = Vector(gravity[1], gravity[2], gravity[3])
 
 	self.e2.data.e2p_particle_data.gravity = gravity
 end
