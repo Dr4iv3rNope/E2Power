@@ -385,6 +385,8 @@ e2function entity entity:playerRagdoll()
 		this:Spectate(OBS_MODE_CHASE)
 		this:SpectateEntity(ragdoll)
 		this:StripWeapons()
+
+		return ragdoll
 	else
 		this._e2p_ragdoll:Remove()
 
