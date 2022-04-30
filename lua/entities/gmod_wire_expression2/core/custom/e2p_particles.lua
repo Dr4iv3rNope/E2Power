@@ -56,6 +56,8 @@ local whitelist_materials = {
 local function particle(e2, data)
 	if not E2P.ProcessRestriction(e2, E2P.BASIC) then return end
 
+	data.material = data.material:lower()
+
 	if not whitelist_materials[data.material] then
 		return e2:throw("Particle material is not whitelisted!")
 	end
