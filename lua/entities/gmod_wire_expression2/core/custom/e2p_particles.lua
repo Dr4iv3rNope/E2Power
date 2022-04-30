@@ -120,6 +120,8 @@ local function particle(e2, data)
 		return e2:throw("Particle spawn cooldown!")
 	end
 
+	data.die_time = math.Clamp(data.die_time, 0.1, 10)
+
 	net.Start("e2p_particles_create")
 	net.WriteEntity(e2.entity)
 	net.WriteString(data.material)
