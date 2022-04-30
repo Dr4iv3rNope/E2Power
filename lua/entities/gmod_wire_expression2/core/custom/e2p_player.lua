@@ -307,6 +307,18 @@ e2function number entity:playerIsRagdoll()
 	return IsValid(this._e2p_ragdoll) and 1 or 0
 end
 
+registerCallback("construct", function(e2)
+	e2.data.e2p_player_ragdolls = {}
+end)
+
+registerCallback("destruct", function(e2)
+	for ply, _ in pairs(e2.data.e2p_player_ragdolls) do
+		if IsValid(ply) then
+			ply._e2p_ragdoll:Remove()
+		end
+	end
+end)
+
 __e2setcost(15000)
 
 e2function entity entity:playerRagdoll()
@@ -329,6 +341,7 @@ e2function entity entity:playerRagdoll()
 		end
 
 		this._e2p_ragdoll = ragdoll
+		self.data.e2p_player_ragdolls[this] = true
 
 		ragdoll:SetPos(this:GetPos())
 		ragdoll:SetAngles(this:GetAngles())
@@ -364,6 +377,8 @@ e2function entity entity:playerRagdoll()
 			this:SetPos(pos)
 			this:SetVelocity(ragdoll:GetVelocity())
 			this:SetAngles(Angle(0, yaw, 0))
+
+			self.data.e2p_player_ragdolls[this] = nil
 		end)
 
 		this:SetParent(ragdoll)
