@@ -352,7 +352,7 @@ e2function entity entity:playerRagdoll()
 
 		local velocity = this:GetVelocity()
 
-		for i = 0, ragdoll:GetPhysicsObjectCount() do
+		for i = 0, ragdoll:GetPhysicsObjectCount() - 1 do
 			local phys = ragdoll:GetPhysicsObjectNum(i)
 
 			if IsValid(phys) then
