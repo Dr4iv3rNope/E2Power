@@ -89,8 +89,8 @@ local function particle(e2, data)
 	end
 
 	data.die_time = math.Clamp(data.die_time, 0.1, 10)
-	data.start_size = math.Clamp(data.start_size, 0, 5)
-	data.end_size = math.Clamp(data.end_size, 0, 5)
+	data.start_size = math.Clamp(data.start_size, 0, 25)
+	data.end_size = math.Clamp(data.end_size, 0, 25)
 
 	if not processParticleLimit(e2, data) then return end
 
