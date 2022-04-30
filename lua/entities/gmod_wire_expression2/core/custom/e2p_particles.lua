@@ -157,6 +157,10 @@ e2function void particle(
 	number start_alpha,
 	number end_alpha
 )
+	color = Color(color[1], color[2], color[3])
+	pos = Vector(pos[1], pos[2], pos[3])
+	velocity = Vector(velocity[1], velocity[2], velocity[3])
+
 	particle(self, {
 		die_time = die_time,
 		start_size = start_size,
@@ -183,6 +187,10 @@ e2function void particle(
 	number pitch,
 	number roll_delta
 )
+	color = Color(color[1], color[2], color[3])
+	pos = Vector(pos[1], pos[2], pos[3])
+	velocity = Vector(velocity[1], velocity[2], velocity[3])
+
 	particle(self, {
 		die_time = die_time,
 		start_size = start_size,
@@ -208,6 +216,10 @@ e2function void particle(
 	vector velocity,
 	number pitch
 )
+	color = Color(color[1], color[2], color[3])
+	pos = Vector(pos[1], pos[2], pos[3])
+	velocity = Vector(velocity[1], velocity[2], velocity[3])
+
 	particle(self, {
 		die_time = die_time,
 		start_size = start_size,
@@ -232,6 +244,10 @@ e2function void particle(
 	vector pos,
 	vector velocity
 )
+	color = Color(color[1], color[2], color[3])
+	pos = Vector(pos[1], pos[2], pos[3])
+	velocity = Vector(velocity[1], velocity[2], velocity[3])
+
 	particle(self, {
 		die_time = die_time,
 		start_size = start_size,
