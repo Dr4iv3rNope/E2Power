@@ -201,3 +201,100 @@ e2function number entity:plyGetJumpPower()
 
 	return this:GetJumpPower()
 end
+
+__e2setcost(10)
+
+e2function number entity:lookUpBone(string boneName)
+	if !IsValid(this) then return -1 end
+	return this:LookupBone(boneName) or -1
+end
+
+__e2setcost(200)
+
+e2function vector entity:playerBonePos(number index)
+	if not E2P.ProcessValidPlayer(self, this) then return end
+
+	local pos = this:GetBonePosition(this:TranslatePhysBoneToBone(index))
+
+	if not pos then
+		return self:throw("Invalid bone!")
+	end
+
+	return pos
+end
+
+e2function angle entity:playerBoneAng(number index)
+	if not E2P.ProcessValidPlayer(self, this) then return end
+
+	local _, ang = this:GetBonePosition(this:TranslatePhysBoneToBone(index))
+
+	if not ang then
+		return self:throw("Invalid bone!")
+	end
+
+	return ang
+end
+
+__e2setcost(300)
+
+e2function vector entity:playerBonePos(string boneName)
+	if not E2P.ProcessValidPlayer(self, this) then return end
+
+	local pos = this:GetBonePosition(this:LookupBone(boneName))
+
+	if not pos then
+		return self:throw("Invalid bone!")
+	end
+
+	return pos
+end
+
+e2function angle entity:playerBoneAng(number index)
+	if not E2P.ProcessValidPlayer(self, this) then return end
+
+	local _, ang = this:GetBonePosition(this:LookupBone(boneName))
+
+	if not ang then
+		return self:throw("Invalid bone!")
+	end
+
+	return ang
+end
+
+__e2setcost(500)
+
+e2function void playerSetBoneAng(number index, angle ang)
+	if not E2P.ProcessRestriction(self, E2P.ADVANCED) then return end
+
+	ang = Angle(ang[1], ang[2], ang[3])
+
+	self.player:ManipulateBoneAngles(index, ang)
+end
+
+e2function void entity:playerSetBoneAng(number index, angle ang)
+	if not E2P.ProcessRestriction(self, E2P.ADVANCED) then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
+
+	ang = Angle(ang[1], ang[2], ang[3])
+
+	this:ManipulateBoneAngles(index, ang)
+end
+
+__e2setcost(600)
+
+e2function void playerSetBoneAng(string boneName, angle ang)
+	if not E2P.ProcessRestriction(self, E2P.ADVANCED) then return end
+
+	ang = Angle(ang[1], ang[2], ang[3])
+
+	self.player:ManipulateBoneAngles(self.player:LookupBone(boneName), ang)
+end
+
+e2function void entity:playerSetBoneAng(string boneName, angle ang)
+	if not E2P.ProcessRestriction(self, E2P.ADVANCED) then return end
+	if not E2P.ProcessValidPlayer(self, this) then return end
+
+	ang = Angle(ang[1], ang[2], ang[3])
+
+	this:ManipulateBoneAngles(this:LookupBone(boneName), ang)
+end
