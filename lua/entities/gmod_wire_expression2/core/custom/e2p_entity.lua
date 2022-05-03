@@ -8,8 +8,42 @@ local whitelist = {
 	["item_battery"] = true
 }
 
-local function canSpawnEntity(class)
-	return whitelist[class]
+local subclass_whitelist = {
+	["item"]	= "PlayerSpawnSENT"
+}
+
+for subclass, v in pairs(subclass_whitelist) do
+	if type(v) == "string" then
+		local event = v
+
+		subclass_whitelist[subclass] = function(ply, class)
+			return hook.Run(event, ply, class)
+		end
+	end
+end
+
+subclass_whitelist["npc"] = function(ply, class)
+	return hook.Run("PlayerSpawnNPC", ply, class, "")
+end
+
+local function canSpawnEntity(e2, class)
+	if whitelist[class] then
+		return true
+	end
+
+	local subclass = class:match("^(%w+)_")
+
+	if not subclass then
+		return false
+	end
+
+	local validate = subclass_whitelist[subclass]
+
+	if validate and validate(e2.player, class) ~= false then
+		return true
+	end
+
+	return false
 end
 
 local function entitySpawn(e2, class, pos, ang, freeze)
@@ -22,7 +56,7 @@ local function entitySpawn(e2, class, pos, ang, freeze)
 	pos = pos or (e2.entity:GetPos() + (e2.entity:GetUp() * 25))
 	ang = ang or e2.entity:GetAngles()
 
-	if not canSpawnEntity(class) then
+	if not canSpawnEntity(e2, class) then
 		return e2:throw("Entity class is not whitelisted!")
 	end
 
