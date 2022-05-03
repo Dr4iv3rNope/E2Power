@@ -1,11 +1,9 @@
 local entity_spawn_cooldown = CreateConVar("wire_expression2_e2p_entity_spawn_cooldown", "1", FCVAR_ARCHIVE)
 
 local whitelist = {
+	-- projectiles
 	["rpg_missile"] = true,
 	["crossbow_bolt"] = true,
-	["item_healthvial"] = true,
-	["item_healthkit"] = true,
-	["item_battery"] = true
 }
 
 local subclass_whitelist = {
