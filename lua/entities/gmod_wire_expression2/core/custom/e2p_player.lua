@@ -217,7 +217,7 @@ e2function vector entity:playerBonePos(number index)
 	local pos = this:GetBonePosition(this:TranslatePhysBoneToBone(index))
 
 	if not pos then
-		return self:throw("Invalid bone!")
+		return self:throw("Invalid bone!", E2P.NULL_ARRAY3)
 	end
 
 	return pos
@@ -229,7 +229,7 @@ e2function angle entity:playerBoneAng(number index)
 	local _, ang = this:GetBonePosition(this:TranslatePhysBoneToBone(index))
 
 	if not ang then
-		return self:throw("Invalid bone!")
+		return self:throw("Invalid bone!", E2P.NULL_ARRAY3)
 	end
 
 	return ang
@@ -243,7 +243,7 @@ e2function vector entity:playerBonePos(string boneName)
 	local pos = this:GetBonePosition(this:LookupBone(boneName))
 
 	if not pos then
-		return self:throw("Invalid bone!")
+		return self:throw("Invalid bone!", E2P.NULL_ARRAY3)
 	end
 
 	return pos
@@ -255,7 +255,7 @@ e2function angle entity:playerBoneAng(number index)
 	local _, ang = this:GetBonePosition(this:LookupBone(boneName))
 
 	if not ang then
-		return self:throw("Invalid bone!")
+		return self:throw("Invalid bone!", E2P.NULL_ARRAY3)
 	end
 
 	return ang

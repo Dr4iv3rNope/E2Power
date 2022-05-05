@@ -5,6 +5,8 @@ E2P.NONE = 0
 E2P.BASIC = 1
 E2P.ADVANCED = 2
 
+E2P.NULL_ARRAY3 = { 0, 0, 0 }
+
 E2P.PrettyLevels = {
 	[E2P.FULL] =		"Полный",
 	[E2P.NONE] =		"Нету",
