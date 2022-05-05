@@ -63,7 +63,7 @@ local function entitySpawn(e2, class, pos, ang, freeze)
 
 	ent:SetPos(pos)
 	ent:SetAngles(ang)
-	ent:SetOwner(e2.player)
+	ent:CPPISetOwner(e2.player)
 	ent:Spawn()
 
 	local phys = ent:GetPhysicsObject()
