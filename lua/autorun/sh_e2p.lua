@@ -1,4 +1,4 @@
-E2P = {}
+E2P = E2P or {}
 
 E2P.FULL = -1
 E2P.NONE = 0
