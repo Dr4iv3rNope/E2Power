@@ -93,7 +93,7 @@ function E2P.ProcessIsOwner(e2, ent)
 	if e2.player:HasE2PLevel(E2P.ADVANCED) then return true end
 	if E2Lib.isOwner(e2, ent) then return true end
 
-	self:throw("You do not own this prop!")
+	e2:throw("You do not own this prop!")
 
 	return false
 end

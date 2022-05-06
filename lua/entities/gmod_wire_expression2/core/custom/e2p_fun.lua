@@ -204,14 +204,14 @@ e2function void entity:takeDamage(number damage, entity attacker, entity inflict
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
 	if not E2P.ProcessIsOwner(self, this) then return end
 
-	takeDamage(this, self.player, damage, "GENERIC", 0, attacker, inflictor)
+	takeDamage(this, self.player, damage, "GENERIC", Vector(), attacker, inflictor)
 end
 
 e2function void entity:takeDamage(number damage)
 	if not E2P.ProcessRestriction(self, E2P.BASIC) then return end
 	if not E2P.ProcessIsOwner(self, this) then return end
 
-	takeDamage(this, self.player, damage, "GENERIC", 0, self.player, self.entity)
+	takeDamage(this, self.player, damage, "GENERIC", Vector(), self.player, self.entity)
 end
 
 e2function void noDuplications()

@@ -15,14 +15,14 @@ __e2setcost(100)
 
 local function playerNoclip(e2, target, enable)
 	if not e2.player:HasE2PLevel(E2P.ADVANCED) then
-		if this ~= e2.player then return self:throw("You can only target yourself!") end
+		if target ~= e2.player then return e2:throw("You can only target yourself!") end
 
 		if hook.Run("PlayerNoClip", target, enable) == false then
-			return self:throw("You cannot noclip!")
+			return e2:throw("You cannot noclip!")
 		end
 	end
 
-	this:SetMoveType(enable and MOVETYPE_NOCLIP or MOVETYPE_WALK)
+	target:SetMoveType(enable and MOVETYPE_NOCLIP or MOVETYPE_WALK)
 end
 
 e2function void entity:playerNoclip(number enable)
