@@ -205,8 +205,15 @@ end
 __e2setcost(10)
 
 e2function number entity:lookUpBone(string boneName)
-	if !IsValid(this) then return -1 end
-	return this:LookupBone(boneName) or -1
+	if not E2P.ProcessValidEntity(self, this) then return -1 end
+
+	local bone = this:LookupBone(boneName)
+
+	if not bone then
+		return self:throw("Invalid bone!", -1)
+	end
+
+	return bone
 end
 
 __e2setcost(200)
