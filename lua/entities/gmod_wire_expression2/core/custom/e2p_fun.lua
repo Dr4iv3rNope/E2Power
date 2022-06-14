@@ -78,7 +78,7 @@ e2function void entity:shootTo(vector start, vector dir, number spread, number f
 
 	local bullet = {
 		Num = 1,
-		Src = start,
+		Src = Vector(start[1], start[2], start[3]),
 		Dir = Vector(dir[1], dir[2], dir[3]),
 		Spread = Vector(spread, spread, 0),
 		Tracer = 1,
