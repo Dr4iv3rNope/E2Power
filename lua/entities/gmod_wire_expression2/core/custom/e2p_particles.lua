@@ -52,6 +52,11 @@ local whitelist_materials = {
 	["sprites/strider_blackball"] = true,
 	["sprites/yellowflare"] = true,
 	["sprites/sent_ball"] = true,
+	["effects/fire_cloud2"] = true,
+	["particle/smokestack"] = true,
+	["particle/particle_glow_04"] = true,
+	["particles/flamelet4"] = true,
+	["particle/smokesprites_000"] = true,
 }
 
 local function processParticleLimit(e2, data)
