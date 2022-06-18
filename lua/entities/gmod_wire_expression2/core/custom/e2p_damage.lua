@@ -180,7 +180,7 @@ local damage_types = {
 	[16]		= "DMG_VEHICLE",
 }
 
-e2function vector entity:getDamageType()
+e2function string entity:getDamageType()
 	local last_damage = getLastDamageInfo(self, this)
 	if not last_damage then return "" end
 
