@@ -143,7 +143,7 @@ e2function vector entity:getDamagePos()
 	local last_damage = getLastDamageInfo(self, this)
 	if not last_damage then return E2P.NULL_ARRAY3 end
 
-	return last_damage.inflictor
+	return last_damage.pos
 end
 
 local damage_types = {
