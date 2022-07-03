@@ -260,3 +260,36 @@ e2function void entity:setVel(vector velocity)
 
 	this:SetVelocity(velocity)
 end
+
+local function ensureNoRecursiveParent(e2, ent)
+	local parent = ent
+
+	while true do
+		e2.prf = e2.prf + 10
+
+		parent = parent:GetParent()
+		if not IsValid(parent) then break end
+
+		if parent == ent then
+			e2:throw("Recursive parent is not allowed!")
+
+			return false
+		end
+	end
+
+	return true
+end
+
+e2function void entity:setParent(entity parent)
+	if not E2P.ProcessIsOwner(self, this) then return end
+	if not E2P.ProcessIsOwner(self, parent) then return end
+	if not ensureNoRecursiveParent(self, this) then return end
+
+	this:SetParent(parent)
+end
+
+e2function void entity:unParent()
+	if not E2P.ProcessIsOwner(self, this) then return end
+
+	this:SetParent(nil)
+end
