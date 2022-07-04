@@ -87,6 +87,13 @@ function E2P.ProcessValidPlayer(e2, ent)
 	return true
 end
 
+function E2P.ProcessValidWeapon(e2, ent)
+	if not E2P.ProcessValidEntity(e2, ent) then return false end
+	if not ent:IsWeapon() then e2:throw("Entity must be a valid weapon!") return false end
+
+	return true
+end
+
 function E2P.ProcessIsOwner(e2, ent)
 	if not E2P.ProcessValidEntity(e2, ent) then return false end
 
