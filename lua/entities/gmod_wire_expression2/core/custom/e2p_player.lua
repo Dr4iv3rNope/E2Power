@@ -400,3 +400,17 @@ e2function entity entity:playerRagdoll()
 		return nil
 	end
 end
+
+e2function void entity:giveAmmo(string type, number amount)
+	if not E2P.ProcessValidPlayer(self, this) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
+
+	this:GiveAmmo(amount, type)
+end
+
+e2function void entity:setAmmo(string type, number amount)
+	if not E2P.ProcessValidPlayer(self, this) then return end
+	if not E2P.ProcessIsOwner(self, this) then return end
+
+	this:SetAmmo(amount, type)
+end
