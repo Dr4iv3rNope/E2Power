@@ -311,17 +311,17 @@ __e2setcost(10)
 e2function number entity:playerIsRagdoll()
 	if not E2P.ProcessValidPlayer(self, this) then return 0 end
 
-	return IsValid(this._e2p_ragdoll) and 1 or 0
+	return IsValid(this._e2pRagdoll) and 1 or 0
 end
 
 registerCallback("construct", function(e2)
-	e2.data.e2p_player_ragdolls = {}
+	e2.data.e2pPlayerRagdolls = {}
 end)
 
 registerCallback("destruct", function(e2)
-	for ply, _ in pairs(e2.data.e2p_player_ragdolls) do
+	for ply, _ in pairs(e2.data.e2pPlayerRagdolls) do
 		if IsValid(ply) then
-			ply._e2p_ragdoll:Remove()
+			ply._e2pRagdoll:Remove()
 		end
 	end
 end)
@@ -340,15 +340,15 @@ e2function entity entity:playerRagdoll()
 		this:ExitVehicle()
 	end
 
-	if not IsValid(this._e2p_ragdoll) then
+	if not IsValid(this._e2pRagdoll) then
 		local ragdoll = ents.Create("prop_ragdoll")
 
 		if not IsValid(ragdoll) then
 			return self:throw("Cannot create ragdoll!")
 		end
 
-		this._e2p_ragdoll = ragdoll
-		self.data.e2p_player_ragdolls[this] = true
+		this._e2pRagdoll = ragdoll
+		self.data.e2pPlayerRagdolls[this] = true
 
 		ragdoll:SetPos(this:GetPos())
 		ragdoll:SetAngles(this:GetAngles())
@@ -373,8 +373,8 @@ e2function entity entity:playerRagdoll()
 			this:SetParent(nil)
 			this:UnSpectate()
 
-			local ragdoll = this._e2p_ragdoll
-			this._e2p_ragdoll = nil
+			local ragdoll = this._e2pRagdoll
+			this._e2pRagdoll = nil
 
 			local yaw = ragdoll:GetAngles().yaw
 			local pos = ragdoll:GetPos()
@@ -385,7 +385,7 @@ e2function entity entity:playerRagdoll()
 			this:SetPos(pos)
 			this:SetAngles(Angle(0, yaw, 0))
 
-			self.data.e2p_player_ragdolls[this] = nil
+			self.data.e2pPlayerRagdolls[this] = nil
 		end)
 
 		this:SetParent(ragdoll)
@@ -395,7 +395,7 @@ e2function entity entity:playerRagdoll()
 
 		return ragdoll
 	else
-		this._e2p_ragdoll:Remove()
+		this._e2pRagdoll:Remove()
 
 		return nil
 	end

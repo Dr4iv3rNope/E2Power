@@ -41,7 +41,7 @@ net.Receive("e2p_sound_url_play", function()
 		if not IsValid(station) then
 			e2_streams[id] = nil
 
-			return auroralib.ErrorNoHalt("[E2P Sound] Failed to play %s: %s", url, err)
+			return x.ErrorNoHalt("[E2P Sound] Failed to play %s: %s", url, err)
 		end
 
 		info.station = station

@@ -1,62 +1,62 @@
 -- [Entity] = (Set of expression2s)
-local damage_listeners = {}
+local damageListeners = {}
 
 local function listenEntity(e2, ent)
-	local listeners = damage_listeners[ent]
+	local listeners = damageListeners[ent]
 
 	if not listeners then
-		listeners = auroralib.Set()
+		listeners = x.Set()
 
-		damage_listeners[ent] = listeners
+		damageListeners[ent] = listeners
 	end
 
-	listeners:insert(e2.entity)
-	e2.data.e2p_listening_ents:insert(ent)
+	listeners:Insert(e2.entity)
+	e2.data.e2pListeningEntities:Insert(ent)
 end
 
 local function unlistenEntity(e2, ent)
-	local listeners = damage_listeners[ent]
+	local listeners = damageListeners[ent]
 	if not listeners then return end
 
-	listeners:delete(e2.entity)
-	e2.data.e2p_listening_ents:delete(ent)
+	listeners:Delete(e2.entity)
+	e2.data.e2pListeningEntities:Delete(ent)
 end
 
 local function unlistenEntityAll(ent)
-	local listeners = damage_listeners[ent]
+	local listeners = damageListeners[ent]
 	if not listeners then return end
 
-	local e2s = listeners.values
+	local e2s = listeners.Values
 
 	for i = 1, #e2s do
 		local e2 = e2s[i]
 
 		if IsValid(e2) then
-			e2.context.data.e2p_listening_ents:delete(ent)
+			e2.context.data.e2pListeningEntities:Delete(ent)
 		else
 			-- FIXME: may break the code?
 			--listeners:delete(e2)
 		end
 	end
 
-	damage_listeners[ent] = nil
+	damageListeners[ent] = nil
 end
 
 registerCallback("construct", function(e2)
-	e2.data.e2p_listening_ents = auroralib.Set()
+	e2.data.e2pListeningEntities = x.Set()
 end)
 
 registerCallback("destruct", function(e2)
-	local entities = e2.data.e2p_listening_ents.values
+	local entities = e2.data.e2pListeningEntities.Values
 
 	for i = 1, #entities do
 		local ent = entities[i]
-		local listeners = damage_listeners[ent]
+		local listeners = damageListeners[ent]
 
-		listeners:delete(e2.entity)
+		listeners:Delete(e2.entity)
 
-		if listeners:length() == 0 then
-			damage_listeners[ent] = nil
+		if listeners:Length() == 0 then
+			damageListeners[ent] = nil
 		end
 	end
 end)
@@ -66,25 +66,25 @@ hook.Add("EntityRemoved", "e2p damage", function(ent)
 end)
 
 hook.Add("EntityTakeDamage", "e2p damage", function(ent, dmg)
-	local listeners = damage_listeners[ent]
+	local listeners = damageListeners[ent]
 
 	if listeners then
-		ent.e2p_last_damage = {
-			damage		= dmg:GetDamage(),
-			attacker	= dmg:GetAttacker(),
-			inflictor	= dmg:GetInflictor(),
-			pos			= dmg:GetDamagePosition(),
-			type		= dmg:GetDamageType()
+		ent.e2pLastDamage = {
+			Damage		= dmg:GetDamage(),
+			Attacker	= dmg:GetAttacker(),
+			Inflictor	= dmg:GetInflictor(),
+			Position	= dmg:GetDamagePosition(),
+			Type		= dmg:GetDamageType()
 		}
 
-		local e2s = listeners.values
+		local e2s = listeners.Values
 
 		for i = 1, #e2s do
 			local e2 = e2s[i]
 
-			e2.context.data.e2p_damage_clk = ent
+			e2.context.data.e2pDamageClk = ent
 			e2:Execute()
-			e2.context.data.e2p_damage_clk = nil
+			e2.context.data.e2pDamageClk = nil
 		end
 	end
 end)
@@ -111,42 +111,42 @@ end
 
 local function getLastDamageInfo(e2, ent)
 	if not E2P.ProcessValidEntity(e2, ent) then return nil end
-	if not damage_listeners[ent] then return nil end
+	if not damageListeners[ent] then return nil end
 
-	return ent.e2p_last_damage
+	return ent.e2pLastDamage
 end
 
 __e2setcost(10)
 
 e2function number entity:getDamage()
-	local last_damage = getLastDamageInfo(self, this)
-	if not last_damage then return 0 end
+	local lastDamage = getLastDamageInfo(self, this)
+	if not lastDamage then return 0 end
 
-	return last_damage.damage
+	return lastDamage.damage
 end
 
 e2function entity entity:getAttacker()
-	local last_damage = getLastDamageInfo(self, this)
-	if not last_damage then return nil end
+	local lastDamage = getLastDamageInfo(self, this)
+	if not lastDamage then return nil end
 
-	return last_damage.attacker
+	return lastDamage.attacker
 end
 
 e2function entity entity:getInflictor()
-	local last_damage = getLastDamageInfo(self, this)
-	if not last_damage then return nil end
+	local lastDamage = getLastDamageInfo(self, this)
+	if not lastDamage then return nil end
 
-	return last_damage.inflictor
+	return lastDamage.inflictor
 end
 
 e2function vector entity:getDamagePos()
-	local last_damage = getLastDamageInfo(self, this)
-	if not last_damage then return E2P.NULL_ARRAY3 end
+	local lastDamage = getLastDamageInfo(self, this)
+	if not lastDamage then return E2P.NULL_ARRAY3 end
 
-	return last_damage.pos
+	return lastDamage.pos
 end
 
-local damage_types = {
+local damageTypes = {
 	[1048576]	= "DMG_ACID",
 	[33554432]	= "DMG_AIRBOAT",
 	[8192]		= "DMG_ALWAYSGIB",
@@ -181,14 +181,14 @@ local damage_types = {
 }
 
 e2function string entity:getDamageType()
-	local last_damage = getLastDamageInfo(self, this)
-	if not last_damage then return "" end
+	local lastDamage = getLastDamageInfo(self, this)
+	if not lastDamage then return "" end
 
-	return damage_types[last_damage.type] or ""
+	return damageTypes[lastDamage.type] or ""
 end
 
 __e2setcost(1)
 
 e2function entity damageEntClk()
-	return self.data.e2p_damage_clk
+	return self.data.e2pDamageClk
 end

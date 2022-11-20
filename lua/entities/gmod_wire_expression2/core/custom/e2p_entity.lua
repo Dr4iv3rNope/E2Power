@@ -1,4 +1,4 @@
-local entity_spawn_cooldown = CreateConVar("wire_expression2_e2p_entity_spawn_cooldown", "1", FCVAR_ARCHIVE)
+local entitySpawnCooldown = CreateConVar("wire_expression2_e2p_entity_spawn_cooldown", "1", FCVAR_ARCHIVE)
 
 local whitelist = {
 	-- projectiles
@@ -6,21 +6,21 @@ local whitelist = {
 	["crossbow_bolt"] = true,
 }
 
-local subclass_whitelist = {
+local subclassWhitelist = {
 	["item"]	= "PlayerSpawnSENT"
 }
 
-for subclass, v in pairs(subclass_whitelist) do
+for subclass, v in pairs(subclassWhitelist) do
 	if type(v) == "string" then
 		local event = v
 
-		subclass_whitelist[subclass] = function(ply, class)
+		subclassWhitelist[subclass] = function(ply, class)
 			return hook.Run(event, ply, class)
 		end
 	end
 end
 
-subclass_whitelist["npc"] = function(ply, class)
+subclassWhitelist["npc"] = function(ply, class)
 	return hook.Run("PlayerSpawnNPC", ply, class, "")
 end
 
@@ -35,7 +35,7 @@ local function canSpawnEntity(e2, class)
 		return false
 	end
 
-	local validate = subclass_whitelist[subclass]
+	local validate = subclassWhitelist[subclass]
 
 	if validate and validate(e2.player, class) ~= false then
 		return true
@@ -47,7 +47,7 @@ end
 local function entitySpawn(e2, class, pos, ang, freeze)
 	if not E2P.ProcessRestriction(e2, E2P.BASIC) then return end
 
-	if not e2.player:TimeoutAction("e2p entitySpawn cooldown", entity_spawn_cooldown:GetFloat()) then
+	if not e2.player:TimeoutAction("e2p entitySpawn cooldown", entitySpawnCooldown:GetFloat()) then
 		return e2:throw("Entity spawn cooldown!")
 	end
 
@@ -243,10 +243,10 @@ e2function void entity:setVel(vector velocity)
 	velocity = Vector(velocity[1], velocity[2], velocity[3])
 
 	if not this:IsPlayer() then
-		local phys_count = this:GetPhysicsObjectCount() - 1
+		local physCount = this:GetPhysicsObjectCount() - 1
 
-		if phys_count >= 0 then
-			for i = 0, phys_count do
+		if physCount >= 0 then
+			for i = 0, physCount do
 				local phys = this:GetPhysicsObjectNum(i)
 
 				if IsValid(phys) then

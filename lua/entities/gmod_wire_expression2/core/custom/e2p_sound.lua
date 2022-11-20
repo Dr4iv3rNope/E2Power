@@ -1,4 +1,4 @@
-local sound_play_cooldown = CreateConVar("wire_expression2_e2p_sound_play_cooldown", "0.5", FCVAR_ARCHIVE)
+local soundPlayCooldown = CreateConVar("wire_expression2_e2p_sound_play_cooldown", "0.5", FCVAR_ARCHIVE)
 
 __e2setcost(200)
 
@@ -15,7 +15,7 @@ local function normalizePitch(pitch)
 end
 
 local function cooldownPlaySound(e2)
-	if not e2.player:TimeoutAction("sound play cooldown", sound_play_cooldown:GetFloat()) then
+	if not e2.player:TimeoutAction("sound play cooldown", soundPlayCooldown:GetFloat()) then
 		e2:throw("Sound play cooldown!")
 
 		return false
@@ -43,8 +43,8 @@ e2function void soundPlayAll(string path, number volume, number pitch)
 
 	if not restrictLoopingSound(self, path) then return end
 
-	volume = normalizeVolume(volume)
-	pitch = normalizePitch(pitch)
+	volume	= normalizeVolume(volume)
+	pitch	= normalizePitch(pitch)
 
 	for _, ply in ipairs(player.GetAll()) do
 		ply:EmitSound(path, 75, pitch, volume, CHAN_AUTO)
@@ -59,10 +59,10 @@ e2function void soundPlayWorld(string path, vector pos, number distance, number 
 
 	if not restrictLoopingSound(self, path) then return end
 
-	pos = Vector(pos[1], pos[2], pos[3])
-	distance = math.Clamp(distance, 20, 140)
-	pitch = normalizePitch(pitch)
-	volume = normalizeVolume(volume)
+	pos			= Vector(pos[1], pos[2], pos[3])
+	distance	= math.Clamp(distance, 20, 140)
+	pitch		= normalizePitch(pitch)
+	volume		= normalizeVolume(volume)
 
 	sound.Play(path, pos, distance, pitch, volume)
 end
@@ -76,8 +76,8 @@ e2function void entity:soundPlaySingle(string path, number volume, number pitch)
 
 	if not restrictLoopingSound(self, path) then return end
 
-	volume = normalizeVolume(volume)
-	pitch = normalizePitch(pitch)
+	volume	= normalizeVolume(volume)
+	pitch	= normalizePitch(pitch)
 
 	this:EmitSound(path, 75, pitch, volume, CHAN_AUTO)
 end

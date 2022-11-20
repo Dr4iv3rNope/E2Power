@@ -1,7 +1,7 @@
-local load_cooldown = CreateConVar("wire_expression2_e2p_sound_url_load_cooldown", "1", FCVAR_ARCHIVE)
-local max_fft_count = CreateConVar("wire_expression2_e2p_sound_url_max_fft_per_sec", "5", bit.bor(FCVAR_ARCHIVE, FCVAR_REPLICATED))
-local fft_response_timeout = CreateConVar("wire_expression2_e2p_sound_url_fft_response_timeout", "1", bit.bor(FCVAR_ARCHIVE, FCVAR_REPLICATED))
-local id_length_limit = CreateConVar("wire_expression2_e2p_sound_url_id_length_limit", "16", bit.bor(FCVAR_ARCHIVE, FCVAR_REPLICATED))
+local loadCooldown			= CreateConVar("wire_expression2_e2p_sound_url_load_cooldown", "1", FCVAR_ARCHIVE)
+local maxFFTCount			= CreateConVar("wire_expression2_e2p_sound_url_max_fft_per_sec", "5", bit.bor(FCVAR_ARCHIVE, FCVAR_REPLICATED))
+local fftResponseTimeout	= CreateConVar("wire_expression2_e2p_sound_url_fft_response_timeout", "1", bit.bor(FCVAR_ARCHIVE, FCVAR_REPLICATED))
+local idLengthLimit			= CreateConVar("wire_expression2_e2p_sound_url_id_length_limit", "16", bit.bor(FCVAR_ARCHIVE, FCVAR_REPLICATED))
 
 local streams = {}
 
@@ -12,34 +12,34 @@ util.AddNetworkString("e2p_sound_url_playback_state") -- pause/resume
 util.AddNetworkString("e2p_sound_url_parent")
 util.AddNetworkString("e2p_sound_url_fft")
 
-local tick_interval = engine.TickInterval()
+local tickInterval = engine.TickInterval()
 
 local function plyTimeoutFFT(ply)
-	return ply:TimeoutAction("e2p send fft", max_fft_count:GetFloat() * tick_interval)
+	return ply:TimeoutAction("e2p send fft", maxFFTCount:GetFloat() * tickInterval)
 end
 
 local function normalizeID(id)
-	return id:sub(1, id_length_limit:GetInt())
+	return id:sub(1, idLengthLimit:GetInt())
 end
 
 local function requestFFT(e2, id)
-	local e2_streams = streams[e2]
-	if not e2_streams then return end
+	local e2Streams = streams[e2]
+	if not e2Streams then return end
 
 	id = normalizeID(id)
 
-	local info = e2_streams[id]
+	local info = e2Streams[id]
 	if not info then return end
 
 	if plyTimeoutFFT(e2.player) then
-		if not IsValid(info._pending_fft_player) or CurTime() > info._pending_fft_timeout then
+		if not IsValid(info._pendingFFTPlayer) or CurTime() > info._pendingFFTtimeout then
 			net.Start("e2p_sound_url_fft")
 			net.WriteEntity(e2.entity)
 			net.WriteString(id)
 			net.Send(e2.player)
 
-			info._pending_fft_player = e2.player
-			info._pending_fft_timeout = CurTime() + fft_response_timeout:GetFloat()
+			info._pendingFFTPlayer = e2.player
+			info._pendingFFTtimeout = CurTime() + fftResponseTimeout:GetFloat()
 		end
 	end
 
@@ -49,26 +49,26 @@ end
 local function stop(e2, id)
 	id = normalizeID(id)
 
-	local e2_streams = streams[e2]
-	if not e2_streams or not e2_streams[id] then return end
+	local e2Streams = streams[e2]
+	if not e2Streams or not e2Streams[id] then return end
 
 	net.Start("e2p_sound_url_stop")
 	net.WriteEntity(e2.entity)
 	net.WriteString(id)
 	net.Broadcast()
 
-	e2_streams[id] = nil
+	e2Streams[id] = nil
 end
 
 local function play(e2, id, url, sync)
 	id = normalizeID(id)
 
-	local e2_streams = streams[e2]
+	local e2Streams = streams[e2]
 
-	if not e2_streams then
-		e2_streams = {}
+	if not e2Streams then
+		e2Streams = {}
 
-		streams[e2] = e2_streams
+		streams[e2] = e2Streams
 	end
 
 	local info = {
@@ -77,7 +77,7 @@ local function play(e2, id, url, sync)
 		fft = {}
 	}
 
-	e2_streams[id] = info
+	e2Streams[id] = info
 
 	net.Start("e2p_sound_url_play")
 	net.WriteEntity(e2.entity)
@@ -91,8 +91,8 @@ end
 local function setPlaybackState(e2, id, pause)
 	id = normalizeID(id)
 
-	local e2_streams = streams[e2]
-	if not e2_streams or not e2_streams[id] then return end
+	local e2Streams = streams[e2]
+	if not e2Streams or not e2Streams[id] then return end
 
 	net.Start("e2p_sound_url_playback_state")
 	net.WriteEntity(e2.entity)
@@ -104,8 +104,8 @@ end
 local function setVolume(e2, id, volume)
 	id = normalizeID(id)
 
-	local e2_streams = streams[e2]
-	if not e2_streams or not e2_streams[id] then return end
+	local e2Streams = streams[e2]
+	if not e2Streams or not e2Streams[id] then return end
 
 	net.Start("e2p_sound_url_playback_state")
 	net.WriteEntity(e2.entity)
@@ -115,21 +115,21 @@ local function setVolume(e2, id, volume)
 end
 
 local function setParent(e2, id, parent)
-	local is_entity = isentity(parent)
+	local isEntity = isentity(parent)
 
-	auroralib.Assert(type(parent) == "Vector" or is_entity)
+	x.Assert(type(parent) == "Vector" or isEntity)
 
 	id = normalizeID(id)
 
-	local e2_streams = streams[e2]
-	if not e2_streams or not e2_streams[id] then return end
+	local e2Streams = streams[e2]
+	if not e2Streams or not e2Streams[id] then return end
 
 	net.Start("e2p_sound_url_parent")
 	net.WriteEntity(e2.entity)
 	net.WriteString(id)
-	net.WriteBool(is_entity)
+	net.WriteBool(isEntity)
 
-	if is_entity then
+	if isEntity then
 		net.WriteEntity(parent)
 	else
 		net.WriteVector(parent)
@@ -141,14 +141,14 @@ end
 net.Receive("e2p_sound_url_fft", function(_, ply)
 	local e2 = net.ReadEntity()
 
-	local e2_streams = streams[e2.context]
-	if not e2_streams then return end
+	local e2Streams = streams[e2.context]
+	if not e2Streams then return end
 
 	local id = normalizeID(net.ReadString())
-	local info = e2_streams[id]
+	local info = e2Streams[id]
 	if not info then return end
 
-	if info._pending_fft_player ~= ply then return end
+	if info._pendingFFTPlayer ~= ply then return end
 
 	local fft = {}
 	local count = net.ReadUInt(8)
@@ -158,7 +158,7 @@ net.Receive("e2p_sound_url_fft", function(_, ply)
 	end
 
 	info.fft = fft
-	info._pending_fft_player = nil
+	info._pendingFFTPlayer = nil
 end)
 
 registerCallback("destruct", function(e2)
@@ -166,7 +166,7 @@ registerCallback("destruct", function(e2)
 end)
 
 local function inCooldown(e2)
-	if not e2.player:TimeoutAction("e2p sound url load cooldown", load_cooldown:GetFloat()) then
+	if not e2.player:TimeoutAction("e2p sound url load cooldown", loadCooldown:GetFloat()) then
 		e2:throw("Sound URL cooldown")
 
 		return false
@@ -235,10 +235,10 @@ end
 e2function void soundURLPurge()
 	if inCooldown(self) then return end
 
-	local e2_streams = streams[self]
-	if not e2_streams then return end
+	local e2Streams = streams[self]
+	if not e2Streams then return end
 
-	for id, _ in pairs(e2_streams) do
+	for id, _ in pairs(e2Streams) do
 		stop(self, id)
 	end
 

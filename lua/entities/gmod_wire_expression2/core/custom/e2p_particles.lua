@@ -1,5 +1,5 @@
-local particle_limit = CreateConVar("wire_expression2_e2p_particle_limit", "10", FCVAR_ARCHIVE)
-local particle_cooldown = CreateConVar("wire_expression2_e2p_particle_cooldown", "0.1", FCVAR_ARCHIVE)
+local particleLimit = CreateConVar("wire_expression2_e2p_particle_limit", "10", FCVAR_ARCHIVE)
+local particleCooldown = CreateConVar("wire_expression2_e2p_particle_cooldown", "0.1", FCVAR_ARCHIVE)
 
 util.AddNetworkString("e2p_particles_create")
 
@@ -61,21 +61,21 @@ local whitelist_materials = {
 
 local function processParticleLimit(e2, data)
 	local ply = e2.player
-	local count = ply._e2p_particle_limit or 0
+	local count = ply._e2pParticleLimit or 0
 
-	if count > particle_limit:GetInt() then
+	if count > particleLimit:GetInt() then
 		e2:throw("Particle limit!")
 
 		return false
 	end
 
-	timer.Create("e2p reset particle limit " .. ply:UserID(), data.die_time, 1, function()
+	timer.Create("e2p reset particle limit " .. ply:UserID(), data.dieTime, 1, function()
 		if not IsValid(ply) then return end
 
-		ply._e2p_particle_limit = nil
+		ply._e2pParticleLimit = nil
 	end)
 
-	ply._e2p_particle_limit = count + 1
+	ply._e2pParticleLimit = count + 1
 
 	return true
 end
@@ -89,13 +89,13 @@ local function particle(e2, data)
 		return e2:throw("Particle material is not whitelisted!")
 	end
 
-	if not e2.player:TimeoutAction("e2p particle cooldown", particle_cooldown:GetFloat()) then
+	if not e2.player:TimeoutAction("e2p particle cooldown", particleCooldown:GetFloat()) then
 		return e2:throw("Particle spawn cooldown!")
 	end
 
-	data.die_time = math.Clamp(data.die_time, 0.1, 10)
-	data.start_size = math.Clamp(data.start_size, 0, 25)
-	data.end_size = math.Clamp(data.end_size, 0, 25)
+	data.dieTime = math.Clamp(data.dieTime, 0.1, 10)
+	data.startSize = math.Clamp(data.startSize, 0, 25)
+	data.endSize = math.Clamp(data.endSize, 0, 25)
 
 	if not processParticleLimit(e2, data) then return end
 
@@ -104,96 +104,96 @@ local function particle(e2, data)
 	net.WriteString(data.material)
 	net.WriteVector(data.pos)
 	net.WriteFloat(data.pitch)
-	net.WriteInt(data.roll_delta, 8)
-	net.WriteUInt(data.start_alpha, 8)
-	net.WriteUInt(data.end_alpha, 8)
-	net.WriteUInt(data.start_size, 16)
-	net.WriteUInt(data.end_size, 16)
-	net.WriteFloat(data.die_time)
+	net.WriteInt(data.rollDelta, 8)
+	net.WriteUInt(data.startAlpha, 8)
+	net.WriteUInt(data.endAlpha, 8)
+	net.WriteUInt(data.startSize, 16)
+	net.WriteUInt(data.endSize, 16)
+	net.WriteFloat(data.dieTime)
 	net.WriteColor(data.color)
 	net.WriteVector(data.velocity)
-	net.WriteVector(e2.data.e2p_particle_data.gravity)
-	net.WriteBool(e2.data.e2p_particle_data.collide)
-	net.WriteFloat(e2.data.e2p_particle_data.bounce)
+	net.WriteVector(e2.data.e2pParticleData.gravity)
+	net.WriteBool(e2.data.e2pParticleData.collide)
+	net.WriteFloat(e2.data.e2pParticleData.bounce)
 	net.Broadcast()
 end
 
 registerCallback("construct", function(e2)
-	e2.data.e2p_particle_data = {
-		gravity = Vector(0, 0, -9.8),
-		collide = true,
-		bounce = 0.3,
+	e2.data.e2pParticleData = {
+		gravity	= Vector(0, 0, -9.8),
+		collide	= true,
+		bounce	= 0.3,
 	}
 end)
 
 __e2setcost(500)
 
 e2function void particle(
-	number die_time,
-	number start_size,
-	number end_size,
+	number dieTime,
+	number startSize,
+	number endSize,
 	string material,
 	vector color,
 	vector pos,
 	vector velocity,
 	number pitch,
-	number roll_delta,
-	number start_alpha,
-	number end_alpha
+	number rollDelta,
+	number startAlpha,
+	number endAlpha
 )
 	color = Color(color[1], color[2], color[3])
 	pos = Vector(pos[1], pos[2], pos[3])
 	velocity = Vector(velocity[1], velocity[2], velocity[3])
 
 	particle(self, {
-		die_time = die_time,
-		start_size = start_size,
-		end_size = end_size,
-		material = material,
-		color = color,
-		pos = pos,
-		velocity = velocity,
-		pitch = pitch,
-		roll_delta = roll_delta,
-		start_alpha = start_alpha,
-		end_alpha = end_alpha
+		dieTime		= dieTime,
+		startSize	= startSize,
+		endSize		= endSize,
+		material	= material,
+		color		= color,
+		pos			= pos,
+		velocity	= velocity,
+		pitch		= pitch,
+		rollDelta	= rollDelta,
+		startAlpha	= startAlpha,
+		endAlpha	= endAlpha
 	})
 end
 
 e2function void particle(
-	number die_time,
-	number start_size,
-	number end_size,
+	number dieTime,
+	number startSize,
+	number endSize,
 	string material,
 	vector color,
 	vector pos,
 	vector velocity,
 	number pitch,
-	number roll_delta
+	number rollDelta
 )
 	color = Color(color[1], color[2], color[3])
 	pos = Vector(pos[1], pos[2], pos[3])
 	velocity = Vector(velocity[1], velocity[2], velocity[3])
 
 	particle(self, {
-		die_time = die_time,
-		start_size = start_size,
-		end_size = end_size,
-		material = material,
-		color = color,
-		pos = pos,
-		velocity = velocity,
-		pitch = pitch,
-		roll_delta = roll_delta,
-		start_alpha = 255,
-		end_alpha = 255
+		dieTime		= dieTime,
+		startSize	= startSize,
+		endSize		= endSize,
+		material	= material,
+		color		= color,
+		pos			= pos,
+		velocity	= velocity,
+		pitch		= pitch,
+		rollDelta	= rollDelta,
+		startAlpha	= 255,
+		endAlpha	= 255
 	})
 end
 
 e2function void particle(
-	number die_time,
-	number start_size,
-	number end_size,
+	number dieTime,
+	number startSize,
+	number endSize,
 	string material,
 	vector color,
 	vector pos,
@@ -205,24 +205,24 @@ e2function void particle(
 	velocity = Vector(velocity[1], velocity[2], velocity[3])
 
 	particle(self, {
-		die_time = die_time,
-		start_size = start_size,
-		end_size = end_size,
-		material = material,
-		color = color,
-		pos = pos,
-		velocity = velocity,
-		pitch = pitch,
-		roll_delta = 0,
-		start_alpha = 255,
-		end_alpha = 255
+		dieTime		= dieTime,
+		startSize	= startSize,
+		endSize		= endSize,
+		material	= material,
+		color		= color,
+		pos			= pos,
+		velocity	= velocity,
+		pitch		= pitch,
+		rollDelta	= 0,
+		startAlpha	= 255,
+		endAlpha	= 255
 	})
 end
 
 e2function void particle(
-	number die_time,
-	number start_size,
-	number end_size,
+	number dieTime,
+	number startSize,
+	number endSize,
 	string material,
 	vector color,
 	vector pos,
@@ -233,17 +233,17 @@ e2function void particle(
 	velocity = Vector(velocity[1], velocity[2], velocity[3])
 
 	particle(self, {
-		die_time = die_time,
-		start_size = start_size,
-		end_size = end_size,
-		material = material,
-		color = color,
-		pos = pos,
-		velocity = velocity,
-		pitch = 0,
-		roll_delta = 0,
-		start_alpha = 255,
-		end_alpha = 255
+		dieTime		= dieTime,
+		startSize	= startSize,
+		endSize		= endSize,
+		material	= material,
+		color		= color,
+		pos			= pos,
+		velocity	= velocity,
+		pitch		= 0,
+		rollDelta	= 0,
+		startAlpha	= 255,
+		endAlpha	= 255
 	})
 end
 
@@ -252,30 +252,30 @@ __e2setcost(10)
 e2function void particleGravity(vector gravity)
 	gravity = Vector(gravity[1], gravity[2], gravity[3])
 
-	self.data.e2p_particle_data.gravity = gravity
+	self.data.e2pParticleData.gravity = gravity
 end
 
 e2function void particleCollision(number enable)
-	self.data.e2p_particle_data.collide = collide ~= 0
+	self.data.e2pParticleData.collide = collide ~= 0
 end
 
 e2function void particleBounce(number bounce)
-	self.data.e2p_particle_data.bounce = bounce
+	self.data.e2pParticleData.bounce = bounce
 end
 
 e2function number particleLimit()
-	return particle_limit:GetInt()
+	return particleLimit:GetInt()
 end
 
 e2function number hasParticleLimit()
-	local count = ply._e2p_particle_limit or 0
-	local hasLimit = count > particle_limit:GetInt()
+	local count = ply._e2pParticleLimit or 0
+	local hasLimit = count > particleLimit:GetInt()
 
 	return hasLimit and 1 or 0
 end
 
 e2function number particleCooldown()
-	return particle_cooldown:GetFloat()
+	return particleCooldown:GetFloat()
 end
 
 e2function number hasParticleCooldown()

@@ -1,5 +1,5 @@
 
-local blacklist_effects = {
+local blacklistEffects = {
 	["dof_node"] = true,
 	["smoke"] = true,
 	["hl1gaussbeam"] = true
@@ -13,7 +13,7 @@ local function createExplosion(inflictor, attacker, pos, radius, damage)
 	util.Effect("explosion", effectData)
 end
 
-local damage_types = {
+local damageTypes = {
 	ACID =					1048576,
 	AIRBOAT =				33554432,
 	ALWAYSGIB =				8192,
@@ -56,7 +56,7 @@ local function takeDamage(ent, ply, damage, type, force, attacker, inflictor)
 
 	local dmg = DamageInfo()
 	dmg:SetDamage(damage)
-	dmg:SetDamageType(damage_types[type:upper()] or damage_types.GENERIC)
+	dmg:SetDamageType(damageTypes[type:upper()] or damageTypes.GENERIC)
 	dmg:SetAttacker(attacker or ply)
 	dmg:SetInflictor(inflictor or ply)
 	dmg:SetDamageForce(force or Vector())
@@ -72,7 +72,7 @@ e2function void entity:shootTo(vector start, vector dir, number spread, number f
 
 	effect = effect:lower()
 
-	if blacklist_effects[effect] then
+	if blacklistEffects[effect] then
 		error(string.format("Эффект %s запрещен!", effect))
 	end
 
